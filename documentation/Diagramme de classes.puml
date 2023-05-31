@@ -16,6 +16,7 @@ class Auteur {
 class Emprunt {
     -numero : int
     -dateEmprunt : DateTime
+    -dateRetour : DateTime
 }
 
 class Utilisateur {
