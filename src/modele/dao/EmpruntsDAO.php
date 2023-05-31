@@ -20,7 +20,7 @@ class EmpruntsDAO {
         return $emprunts;
     }
 
-    public function findByID(int $id): ?Emprunts {
+    public function findByNum(int $id): ?Emprunts {
         $connexion = Database::getConnection();
         $requeteSQL = "SELECT * FROM emprunts WHERE numero_emprunt = :num";
         $requete = $connexion->prepare($requeteSQL);
@@ -54,9 +54,14 @@ class EmpruntsDAO {
 
     public function update(Emprunts $emprunt): void {
         $connexion = Database::getConnection();
-        $requeteSQL = "UPDATE emprunts SET date_emprunt = :date, isbn = :isbn, id_user = :idUser WHERE numero_emprunt = :num";
+        $requeteSQL = "UPDATE emprunts SET date_emprunt = :date, date_retour = :retour, isbn = :isbn, id_user = :idUser WHERE numero_emprunt = :num";
         $requete = $connexion->prepare($requeteSQL);
         $requete->bindValue(":date",$emprunt->getDateEmprunt()->format("Y-m-d H:i:s"));
+        if ($emprunt->getDateRetour() == null) {
+            $requete->bindValue(":retour",null);
+        } else {
+            $requete->bindValue(":retour",$emprunt->getDateRetour()->format("Y-m-d H:i:s"));
+        }
         $requete->bindValue(":nom",$emprunt->getLivre()->getIsbn());
         $requete->bindValue(":id",$emprunt->getUser()->getId());
         $requete->execute();
@@ -67,7 +72,12 @@ class EmpruntsDAO {
         $emprunt = new Emprunts();
         $livre = new LivreDAO();
         $user = new UtilisateurDAO();
-        $emprunt->setDateEmprunt(DateTime::createFromFormat("Y-m-d", $empruntDB["date_emprunt"]));
+        $emprunt->setDateEmprunt(DateTime::createFromFormat("Y-m-d H:i:s", $empruntDB["date_emprunt"]));
+        if ($empruntDB["date_retour"] == null) {
+            $emprunt->setDateRetour(null);
+        } else {
+            $emprunt->setDateRetour(DateTime::createFromFormat("Y-m-d H:i:s",$empruntDB["date_retour"]));
+        }
         $emprunt->setLivre($livre->findByISBN($empruntDB["isbn"]));
         $emprunt->setUser($user->findByID($empruntDB["id_user"]));
         return $emprunt;

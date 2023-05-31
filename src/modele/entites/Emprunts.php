@@ -7,6 +7,7 @@ class Emprunts {
 
     private int $numero;
     private DateTime $dateEmprunt;
+    private ?DateTime $dateRetour;
     private Livre $livre;
     private Utilisateur $user;
 
@@ -54,4 +55,13 @@ class Emprunts {
         $this->user = $user;
     }
 
+    public function getDateRetour(): ?DateTime
+    {
+        return $this->dateRetour;
+    }
+
+    public function setDateRetour(?DateTime $dateRetour): void
+    {
+        $this->dateRetour = $dateRetour;
+    }
 }

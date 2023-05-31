@@ -28,6 +28,15 @@ class EmprunterLivre {
         if ($user == null) {
             return new EmprunterLivreReponse(EmprunterLivreStatus::USER_INEXISTANT,"L'utilisateur n'existe pas !");
         }
+        //Vérifier si le livre est déjà emprunté
+        $emprunts = $this->empruntsDAO->findAll();
+        foreach ($emprunts as $item) {
+            if ($item->getUser()->getId() == $requete->idUser and $item->getLivre()->getIsbn() == $requete->isbn) {
+                if ($item->getDateRetour() == null) {
+                    return new EmprunterLivreReponse(EmprunterLivreStatus::LIVRE_DEJA_EMPRUNTE, "Le livre choisi est déjà emprunté !");
+                }
+            }
+        }
         //Créer l'emprunt
         $emprunt = new Emprunts();
         $emprunt->setLivre($livre);
