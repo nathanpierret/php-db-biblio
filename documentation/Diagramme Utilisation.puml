@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+skinparam actorStyle awesome
+
+:Utilisateur: --> (Lister les livres)
+:Utilisateur: -> (Rechercher un livre par son ISBN)
+(Rechercher la liste des livres d'un Auteur) <- :Utilisateur:
+
+@enduml

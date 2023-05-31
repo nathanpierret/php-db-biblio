@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Livre {
+    -isbn : string
+    -titre : string
+    -dateParution : DateTime
+    -nbPages : int
+}
+
+class Auteur {
+    -prenom : string
+    -nom : string
+}
+
+class Emprunt {
+    -numero : int
+    -dateEmprunt : DateTime
+}
+
+class Utilisateur {
+    -prenom : string
+    -nom : string
+}
+
+Livre "0..*" -> "1..1" Auteur : est écrit par >
+Livre "1..1  " <-- "0..* " Emprunt : > peut être
+Emprunt "0..*" -> "1..1" Utilisateur : > est demandé par
+
+@enduml
